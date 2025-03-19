@@ -9,10 +9,10 @@ use App\Http\Controllers\api\StockController;
 use App\Http\Controllers\api\TokensController;
 use App\Http\Controllers\api\OutsController;
 use App\Http\Middleware\CheckIsLogged;
-use App\Models\Moviment;
 use Illuminate\Support\Facades\Route;
 // Auth route
 Route::post('/api/loginSubmit', [AuthController::class, 'login']);
+Route::post('/api/signUpSubmit', [AuthController::class, 'signUp']);
 // Decode token
 // Route::get('api/token', [TokensController::class, "decryptToken"]);
 
@@ -21,7 +21,6 @@ Route::middleware([CheckIsLogged::class])->group(function () {
   // Routes Auth 
   Route::post('/api/logout', [AuthController::class, 'logout']);
   Route::get('/api/renoveToken', [TokensController::class, 'renoveToken']);
-  Route::post('/api/signUpSubmit', [AuthController::class, 'signUp']);
 
   // Routes Itens
   Route::get('/api/itens', [ItensController::class, 'index']);
@@ -63,7 +62,6 @@ Route::middleware([CheckIsLogged::class])->group(function () {
   // Routes Moviments
   Route::get('/api/moviments', [MovimentsController::class, 'index']);
   Route::get('/api/moviments/{id}', [MovimentsController::class, 'show']);
-  // Route::delete('/api/moviments/{id}', [MovimentsController::class, 'destroy']);
   Route::post('/api/moviments', [MovimentsController::class, 'create']);
   Route::post('/api/moviments/{id}', [MovimentsController::class, 'update']);
 });

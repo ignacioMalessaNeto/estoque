@@ -58,7 +58,7 @@ class MovimentsController extends Controller
         $validateRules = [
             "quantity" => "required|min:1|max:100",
             "type_moviment" => "string|required|min:1|max:7",
-            "id_entrie" => "required|exists:stock,id|min:1",
+            "id_entrie" => "exists:stock,id|min:1",
             "id_out" => "exists:outs,id|min:1",
         ];
 

@@ -1,66 +1,424 @@
-<p align="center"><a href="https://laravel.com" target="_blank"><img src="https://raw.githubusercontent.com/laravel/art/master/logo-lockup/5%20SVG/2%20CMYK/1%20Full%20Color/laravel-logolockup-cmyk-red.svg" width="400" alt="Laravel Logo"></a></p>
+# API de Gerenciamento de estoque
 
-<p align="center">
-<a href="https://github.com/laravel/framework/actions"><img src="https://github.com/laravel/framework/workflows/tests/badge.svg" alt="Build Status"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/dt/laravel/framework" alt="Total Downloads"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/v/laravel/framework" alt="Latest Stable Version"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/l/laravel/framework" alt="License"></a>
-</p>
+Esta é uma API desenvolvida em Laravel 11 para gerenciar um sistema de estoque.
 
-## About Laravel
+## Requisitos
 
-Laravel is a web application framework with expressive, elegant syntax. We believe development must be an enjoyable and creative experience to be truly fulfilling. Laravel takes the pain out of development by easing common tasks used in many web projects, such as:
+- PHP 8.2 ou superior
+- Composer
+- MySQL
 
-- [Simple, fast routing engine](https://laravel.com/docs/routing).
-- [Powerful dependency injection container](https://laravel.com/docs/container).
-- Multiple back-ends for [session](https://laravel.com/docs/session) and [cache](https://laravel.com/docs/cache) storage.
-- Expressive, intuitive [database ORM](https://laravel.com/docs/eloquent).
-- Database agnostic [schema migrations](https://laravel.com/docs/migrations).
-- [Robust background job processing](https://laravel.com/docs/queues).
-- [Real-time event broadcasting](https://laravel.com/docs/broadcasting).
+## Instalação
 
-Laravel is accessible, powerful, and provides tools required for large, robust applications.
+### Backend (Laravel)
 
-## Learning Laravel
+1. Clone o repositório:
+    ```bash
+    git clone https://github.com/ignacioMalessaNeto/estoque.git 
+    cd estoque
+    ```
 
-Laravel has the most extensive and thorough [documentation](https://laravel.com/docs) and video tutorial library of all modern web application frameworks, making it a breeze to get started with the framework.
+2. Instale as dependências do PHP com o Composer:
+    ```bash
+    composer install
+    ```
 
-You may also try the [Laravel Bootcamp](https://bootcamp.laravel.com), where you will be guided through building a modern Laravel application from scratch.
+3. Copie o arquivo `.env.example` para `.env` e configure as variáveis de ambiente, especialmente o banco de dados:
+    ```bash
+    cp .env.example .env
+    ```
 
-If you don't feel like reading, [Laracasts](https://laracasts.com) can help. Laracasts contains thousands of video tutorials on a range of topics including Laravel, modern PHP, unit testing, and JavaScript. Boost your skills by digging into our comprehensive video library.
+4. Execute as migrações para criar as tabelas no banco de dados:
+    ```bash
+    php artisan migrate
+    ```
 
-## Laravel Sponsors
+5. (Opcional) Popule o banco de dados com dados fictícios:
+    ```bash
+    php artisan db:seed
+    ```
 
-We would like to extend our thanks to the following sponsors for funding Laravel development. If you are interested in becoming a sponsor, please visit the [Laravel Partners program](https://partners.laravel.com).
+6. Inicie o servidor de desenvolvimento:
+    ```bash
+    php artisan serve
+    ```
 
-### Premium Partners
+## Endpoints da API
 
-- **[Vehikl](https://vehikl.com/)**
-- **[Tighten Co.](https://tighten.co)**
-- **[WebReinvent](https://webreinvent.com/)**
-- **[Kirschbaum Development Group](https://kirschbaumdevelopment.com)**
-- **[64 Robots](https://64robots.com)**
-- **[Curotec](https://www.curotec.com/services/technologies/laravel/)**
-- **[Cyber-Duck](https://cyber-duck.co.uk)**
-- **[DevSquad](https://devsquad.com/hire-laravel-developers)**
-- **[Jump24](https://jump24.co.uk)**
-- **[Redberry](https://redberry.international/laravel/)**
-- **[Active Logic](https://activelogic.com)**
-- **[byte5](https://byte5.de)**
-- **[OP.GG](https://op.gg)**
+### Autenticação
 
-## Contributing
+- **Login**
+    ```http
+    POST /api/loginSubmit
+    ```
+    Body:
+    ```json
+    {
+        "email": "seu-email@example.com",
+        "password": "sua-senha"
+    }
+    ```
 
-Thank you for considering contributing to the Laravel framework! The contribution guide can be found in the [Laravel documentation](https://laravel.com/docs/contributions).
+- **Registro**
+    ```http
+    POST /api/signUpSubmit
+    ```
+    Body:
+    ```json
+    {   
+      "name": "seu-nome",
+      "email": "seu-email@example.com",
+      "password": "sua-senha",
+      "level_access": "0"
+    }
+    ```
 
-## Code of Conduct
+- **Logout**
+    ```http
+    POST /api/logout/{id_user}
+    ```
+    Authorization:
+    ```
+    Bearer token
+    ```
 
-In order to ensure that the Laravel community is welcoming to all, please review and abide by the [Code of Conduct](https://laravel.com/docs/contributions#code-of-conduct).
+### Itens
 
-## Security Vulnerabilities
+- **Listar todos os itens**
+    ```http
+    GET /api/itens
+    ```
+    Authorization:
+    ```
+    Bearer token
+    ```
 
-If you discover a security vulnerability within Laravel, please send an e-mail to Taylor Otwell via [taylor@laravel.com](mailto:taylor@laravel.com). All security vulnerabilities will be promptly addressed.
+- **Mostrar um item específico**
+    ```http
+    GET /api/itens/{id}
+    ```
+    Authorization:
+    ```
+    Bearer token
+    ```
 
-## License
+- **Criar um novo item**
+    ```http
+    POST /api/itens
+    ```
+    Body:
+    ```json
+    {
+    "name" : "nome-item"
+    }
+    ```
+    Authorization:
+    ```
+    Bearer token
+    ```
 
-The Laravel framework is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
+- **Atualizar um item existente**
+    ```http
+    POST /api/itens/{id}
+    ```
+    Body:
+    ```json
+    {
+    "name" : "nome-item"
+    }
+    ```
+    Authorization:
+    ```
+    Bearer token
+    ```
+
+- **Deletar um item**
+    ```http
+    DELETE /api/itens/{id}
+    ```
+    Authorization:
+    ```
+    Bearer token
+    ```
+### Endereços
+
+- **Listar todos os endereços**
+    ```http
+    GET /address
+    ```
+    Authorization:
+    ```
+    Bearer token
+    ```
+- **Mostrar um endereço específico**
+    ```http
+    GET /address/{id}
+    ```
+    Authorization:
+    ```
+    Bearer token
+    ```
+- **Criar um novo endereço**
+    ```http
+    POST /address
+    ```
+    Body:
+    ```json
+    {
+    "name" : "endereço"
+    }
+    ```
+    Authorization:
+    ```
+    Bearer token
+    ```
+
+- **Atualizar um endereço existente**
+    ```http
+    PUT /address/{id}
+    ```
+    Body:
+    ```json
+    {
+    "name" : "endereço"
+    }
+    ```
+    Authorization:
+    ```
+    Bearer token
+    ```
+- **Deletar um endereço**
+    ```http
+    DELETE /address/{id}
+    ```
+    Authorization:
+    ```
+    Bearer token
+    ```
+### Categorias
+
+- **Listar todas as categoria**
+    ```http
+    GET /api/category
+    ```
+    Authorization:
+    ```
+    Bearer token
+    ```
+- **Mostrar uma categoria específica**
+    ```http
+    GET /api/category/{id}
+    ```
+    Authorization:
+    ```
+    Bearer token
+    ```
+- **Criar uma nova categoria**
+    ```http
+    POST /api/category
+    ```
+    categoria:
+    ```json
+    {
+    "name" : "sua-categoria"
+    }
+    ```
+    Authorization:
+    ```
+    Bearer token
+    ```
+- **Atualizar uma categoria existente**
+    ```http
+    PUT /api/category/{id}
+    ```
+    Body:
+    ```json
+    {
+    "name" : "categoria-atualizada"
+    }
+    ```
+    Authorization:
+    ```
+    Bearer token
+    ```
+- **Deletar uma categoria**
+    ```http
+    DELETE /api/category/{id}
+    ```
+    Authorization:
+    ```
+    Bearer token
+    ```
+### Estoque
+
+
+- **Listar todos os cadastros**
+    ```http
+    GET /api/stock
+    ```
+    Authorization:
+    ```
+    Bearer token
+    ```
+- **Mostrar um cadastro no estoque específico**
+    ```http
+    GET /api/stock/{id}
+    ```
+    Authorization:
+    ```
+    Bearer token
+    ```
+- **Criar um novo cadastro**
+    ```http
+    POST /api/stock
+    ```
+    Body:
+    ```json
+    {
+    "quantity" : 5,
+    "id_item" : 1,
+    "id_category" : 1,
+    "id_address" : 1
+    }
+    ```
+    Authorization:
+    ```
+    Bearer token
+    ```
+- **Atualizar um cadastro existente**
+    ```http
+    PUT /api/stock/{id}
+    ```
+    Body:
+    ```json
+    {    
+      "quantity" : 5,
+      "id_item" : 1,
+      "id_category" : 1,
+      "id_address" : 1
+    }
+    ```
+    Authorization:
+    ```
+    Bearer token
+    ```
+- **Deletar um cadastro no estoque**
+    ```http
+    DELETE /api/stock/{id}
+    ```
+    Authorization:
+    ```
+    Bearer token
+    ```
+### Saídas
+- **Listar todas as saídas**
+    ```http
+    GET /api/out
+    ```
+    Authorization:
+    ```
+    Bearer token
+    ```
+- **Mostrar uma saída no estoque específico**
+    ```http
+    GET /api/out/{id}
+    ```
+    Authorization:
+    ```
+    Bearer token
+    ```
+- **Criar uma nova saída**
+    ```http
+    POST /out/stock
+    ```
+    Body:
+    ```json
+    {
+    "quantity" : 1,
+    "id_stock" : 1,
+    "id_sender" : 1
+    }
+    ```
+    Authorization:
+    ```
+    Bearer token
+    ```
+- **Atualizar uma saída existente**
+    ```http
+    PUT /api/out/{id}
+    ```
+    Body:
+    ```json
+    {    
+    "quantity" : 1,
+    "id_stock" : 1,
+    "id_sender" : 1
+    }
+    ```
+    Authorization:
+    ```
+    Bearer token
+    ```
+- **Deletar uma saída no estoque**
+    ```http
+    DELETE /api/out/{id}
+    ```
+    Authorization:
+    ```
+    Bearer token
+    ```
+### Saídas
+- **Listar todos os movimentos**
+    ```http
+    GET /api/moviments
+    ```
+    Authorization:
+    ```
+    Bearer token
+    ```
+- **Mostrar um movimento no estoque específico**
+    ```http
+    GET /api/moviments/{id}
+    ```
+    Authorization:
+    ```
+    Bearer token
+    ```
+- **Criar um novo movimento**
+    ```http
+    POST /moviments/stock
+    ```
+    Body:
+    ```json
+    {    
+    "quantity" : "4",
+    "type_moviment" : "Entrada||Saída",
+    "id_entrie" : "id da entrada se for cadastro estoque",
+    "id_out" : "id da saída se for cadastrada uma saída"
+    }
+    ```
+    Authorization:
+    ```
+    Bearer token
+    ```
+- **Atualizar um movimento existente**
+    ```http
+    PUT /api/moviments/{id}
+    ```
+    Body:
+    ```json
+    {    
+    "quantity" : "4",
+    "type_moviment" : "Entrada||Saída",
+    "id_entrie" : "id da entrada se for cadastro estoque",
+    "id_out" : "id da saída se for cadastrada uma saída"
+    }
+    ```
+    Authorization:
+    ```
+    Bearer token
+    ```
+
+## Licença
+
+Este projeto está licenciado sob a licença MIT. Veja o arquivo [LICENSE](LICENSE) para mais detalhes.
